@@ -1,8 +1,14 @@
 var results; // global space for future access
 
+// JSONP callback
+function yahooHandler(response) {
+  results = response.query.results;
+}
+
+// driver: called on button click
 function clickHandler(targetUrl, tags, event){
   event.preventDefault();
-  makeQuery(makeUrl(targetUrl, tags));
+  insertScriptTag(makeUrl(targetUrl, tags));
 }
 
 function makeUrl(targetUrl, tags) {
@@ -15,17 +21,9 @@ function makeUrl(targetUrl, tags) {
   return baseURI + encodedQuery + suffix;
 }
 
-function makeQuery(url) {
-  // make script element
+function insertScriptTag(url) {
   var scriptEl  = document.createElement("script");
   scriptEl.type = "text/javascript";
   scriptEl.src  = url;
-
-  // insert script element
   document.body.appendChild(scriptEl);
-}
-
-// JSONP callback
-function yahooHandler(response) {
-  results = response.query.results;
 }
