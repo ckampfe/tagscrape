@@ -1,17 +1,27 @@
-var results; // global space for future access
+/* globals */
+var RESULTS,
+    TAGS,
+    MATCHES;
 
-// JSONP callback
+/* JSONP callback */
 function yahooHandler(response) {
-  results = response.query.results;
+  RESULTS = response.query.results; // returns { body: {...} }
+  console.log(RESULTS);
+  // console.log(TAGS);
+  MATCHES = parseResults(TAGS, RESULTS); // returns { p: [{},{}] }, etc
+  console.log("MATCHES!");
+  console.log(MATCHES);
 }
 
 // driver: called on button click
 function clickHandler(targetUrl, tags, event){
   event.preventDefault();
-  insertScriptTag(makeUrl(targetUrl, tags));
+  TAGS = tags.split(' ');
+  insertScriptTag(makeUrl(targetUrl));
 }
 
-function makeUrl(targetUrl, tags) {
+/* URL maker helper */
+function makeUrl(targetUrl) {
   var baseURI          = "http://query.yahooapis.com/v1/public/yql?q=",
       encodedTargetUrl = encodeURIComponent('http://') + targetUrl,
       encodedQuery     = encodeURI("select * from html where url")
@@ -21,6 +31,7 @@ function makeUrl(targetUrl, tags) {
   return baseURI + encodedQuery + suffix;
 }
 
+/* insert URL into doc to start JSONP */
 function insertScriptTag(url) {
   var scriptEl  = document.createElement("script");
   scriptEl.type = "text/javascript";
