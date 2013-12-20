@@ -8,16 +8,17 @@ function parseResults(tags, queryResults) {
     searchResults[el] = [];
   });
 
-  return search(
-                queryResults.body, // the current search object
-                'body',            // a string representing the parent
-                tags,              // array of target tags
-                targetAttrs,       // array of target attributes
-                searchResults      // { div: [ {...}, {...} ] }
-               );
+  return search( queryResults.body, 'body', tags, targetAttrs, searchResults);
 }
 
-function search(current, parentNode, tags, targetAttributes, searchResults) {
+function search(
+                current,          // the current search object
+                parentNode,       // a string representing the parent
+                tags,             // array of target tags
+                targetAttributes, // array of target attributes
+                searchResults     // { div: [ {...}, {...} ] }
+                ) {
+
   var children = Object.keys(current);
 
   /* action */
