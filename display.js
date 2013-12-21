@@ -21,12 +21,12 @@ function display(matches) {
 // generic
 function insertItems(parentElement, matchedItems, tagType) {
   matchedItems.forEach(function(matchedItem) {
-    var newEl         = document.createElement(tagType),        // make element
-        contentString = stringifyItemConents(matchedItem),      // stringify contents
-        itemContents  = document.createTextNode(contentString); // make content
+    var newEl         = document.createElement(tagType),
+        contentString = stringifyItemConents(matchedItem),
+        itemContents  = document.createTextNode(contentString);
 
-    newEl.appendChild(itemContents);  // add content to element
-    parentElement.appendChild(newEl); // add element to DOM
+    newEl.appendChild(itemContents);
+    parentElement.appendChild(newEl);
   });
 }
 
