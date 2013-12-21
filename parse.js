@@ -1,90 +1,65 @@
-/* extensions/helpers/private are defined at the bottom of their scope */
+/* init */
+function parseResults(tags, queryResults) {
 
-/* INIT */
-function parseResults(tags, results) {
-  var matches    = (function() {
-                     var matches = {};
-                     tags.forEach(function(tag) {
-                       matches[tag] = [];
-                     });
+  var targetAttrs   = ['content', 'href', 'class', 'id'],
+      searchResults = {};
 
-                     return matches;
-                   })();
+  tags.forEach(function(el) {
+    searchResults[el] = [];
+  });
 
-  var parentNode = "body";
-
-  return findMatches(tags, matches, results.body, parentNode);
+  return search( queryResults.body, 'body', tags, targetAttrs, searchResults);
 }
 
-/* MAIN */
-function findMatches(tags, matches, node, parentNode) {
-  var interests = ["class", "id", "content", "href", "span"];
+function search(
+                current,          // the current search object
+                parentNode,       // a string representing the parent
+                tags,             // array of target tags
+                targetAttributes, // array of target attributes
+                searchResults     // { div: [ {...}, {...} ] }
+                ) {
 
-  // if object && not array
-  if (typeof node === 'object' && !node.isArray) {
-    var children = Object.keys(node); // children
+  var children = Object.keys(current);
 
-    // then, if parent is something we want
-    if (tags.include(parentNode)) {
-      collectMatches(matches);
-    }
+  /* action */
+  if (tags.include(parentNode)) {
+    matchObj = {};
 
-    // descend
-    children.forEach(function(key) {
-      if (hasChildren(key)) {
-        return findMatches(tags, matches, node[key], key);
+    children.forEach(function(child) {
+      if (targetAttributes.include(child)) {
+        matchObj[child] = current[child];
       }
     });
 
-  } else if (node.isArray) {
-    console.log("is array");
-  } else { // otherwise
-    console.log("something fucked up");
+    searchResults[parentNode].push(matchObj);
   }
 
-  return matches;
+  /* crawl */
+  children.forEach(function(child) {
+    var currentChild = current[child];
 
-
-  /* PRIVATE / HELPERS */
-
-  // adding actual matches to matches obj
-  function collectMatches(matches) {
-    var temp = {};
-    children.forEach(function(key) {
-      if (interests.include(key)) { // if there's a match
-        temp[key] = node[key];
-      }
-    });
-
-    if (Object.keys(temp).length > 0) { // if any matches
-      matches[parentNode].push(temp);
-    }
-  }
-
-  // checking if a given key has children
-  function hasChildren(key) {
-    if (node[key] !== null) {
-      if (node[key].length > 1) {
-        // console.log("array");
-        for (var i = 0; i < node[key].length; i++) {
-          return findMatches(tags, matches, node[i], parentNode);
+    if (typeof currentChild !== 'string' && currentChild.length > 0) {
+      for (var i = 0; i < currentChild.length; i++) {
+        if (currentChild[i] != null) { // needed, some </br> silliness
+          search(currentChild[i], child, tags, targetAttributes, searchResults);
         }
-      } else if (typeof node[key] === 'string') {
-        console.log("string");
-      } else if (Object.keys(node[key]).length) {
-        console.log( node[key] + " has children");
-        return true;
-      } else {
-        console.log("else");
       }
+
+    } else if (typeof currentChild !== 'string' && Object.keys(currentChild).length > 0) {
+          return search(currentChild, child, tags, targetAttributes, searchResults);
+
+    } else {
+      console.log("ignore, not array or object");
     }
-  }
+  });
+
+ return searchResults;
 }
 
 // like Ruby's Array#include?
-Array.prototype.include = function(thing) {
-  var lengthTarget = this.filter(function(arrayItem) {
-    return arrayItem === thing;
+Array.prototype.include = function(challengeEl) {
+  var lengthTarget = this.filter(function(residentEl) {
+    return residentEl === challengeEl;
   });
 
   return ( lengthTarget.length ? true : false );
