@@ -7,10 +7,9 @@ var RESULTS,
 function yahooHandler(response) {
   RESULTS = response.query.results; // returns { body: {...} }
   console.log(RESULTS);
-  // console.log(TAGS);
   MATCHES = parseResults(TAGS, RESULTS); // returns { p: [{},{}] }, etc
-  console.log("MATCHES!");
   console.log(MATCHES);
+  display(MATCHES);
 }
 
 // driver: called on button click
