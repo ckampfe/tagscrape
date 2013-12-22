@@ -28,15 +28,14 @@ function insertItems(parentElement, matchedItems, tagType) {
     newEl.appendChild(itemContents);
     parentElement.appendChild(newEl);
   });
-}
 
+  function stringifyItemConents(example) {
+    var stringifiedContents = "";
+    var keys = Object.keys(example);
+    keys.forEach(function(key) {
+      stringifiedContents += key + ": " + example[key] + "\n";
+    });
 
-function stringifyItemConents(example) {
-  var stringifiedContents = "";
-  var keys = Object.keys(example);
-  keys.forEach(function(key) {
-    stringifiedContents += key + ": " + example[key] + "\n";
-  });
-
-  return stringifiedContents;
+    return stringifiedContents;
+  }
 }
