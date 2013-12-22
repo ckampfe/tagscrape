@@ -1,4 +1,12 @@
 function display(matches) {
+  var displayDiv = document.getElementById('display');
+
+  if (displayDiv.hasChildNodes()) {
+    while (displayDiv.firstChild) {
+      displayDiv.removeChild(displayDiv.firstChild);
+    }
+  }
+
   var tags = Object.keys(matches);
 
   // make a container for each query tag
@@ -10,13 +18,13 @@ function display(matches) {
         container.id   = tag;
 
     // append container to DOM
-    var displayDiv = document.getElementById('display');
-        displayDiv.appendChild(container);
+    displayDiv.appendChild(container);
 
     // insert query tag children into container
     insertItems(container, matches[tag], 'li');
   });
 }
+
 
 // generic
 function insertItems(parentElement, matchedItems, tagType) {
