@@ -64,3 +64,17 @@ Array.prototype.include = function(challengeEl) {
 
   return ( lengthTarget.length ? true : false );
 }
+
+// like Ruby's Array#uniq
+Array.prototype.uniq = function() {
+  if (this.length <= 1) {
+    return this;
+  } else {
+    var dict = {};
+    for (var i = 0; i < this.length; i++) {
+      dict[this[i]] = 0;
+    }
+
+    return Object.keys(dict);
+  }
+}
