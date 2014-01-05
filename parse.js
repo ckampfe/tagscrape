@@ -1,14 +1,14 @@
 /* init */
-function parseResults(tags, queryResults) {
+function parseResults(tags, targets, queryResults) {
 
-  var targetAttrs   = ['content', 'href', 'class', 'id'],
-      searchResults = {};
+  var searchResults = {};
+  targets.unshift('content');
 
   tags.forEach(function(el) {
     searchResults[el] = [];
   });
 
-  return search( queryResults.body, 'body', tags, targetAttrs, searchResults);
+  return search(queryResults.body, 'body', tags, targets, searchResults);
 }
 
 function search(
