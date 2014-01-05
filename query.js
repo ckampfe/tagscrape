@@ -1,21 +1,23 @@
 /* globals */
 var RESULTS,
     TAGS,
+    TARGETS,
     MATCHES;
 
 /* JSONP callback */
 function yahooHandler(response) {
   RESULTS = response.query.results; // returns { body: {...} }
   console.log(RESULTS);
-  MATCHES = parseResults(TAGS, RESULTS); // returns { p: [{},{}] }, etc
+  MATCHES = parseResults(TAGS, TARGETS, RESULTS); // returns { p: [{},{}] }, etc
   console.log(MATCHES);
   display(MATCHES);
 }
 
 // driver: called on button click
-function clickHandler(targetUrl, tags, event){
+function clickHandler(targetUrl, tags, targets, event){
   event.preventDefault();
   TAGS = tags.split(' ');
+  TARGETS = targets.split(' ');
   insertScriptTag(makeUrl(targetUrl));
 }
 

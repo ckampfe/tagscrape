@@ -7,7 +7,8 @@
   <form>
     <input type="text" placeholder="url" name="url">
     <input type="text" placeholder="p div span" name="tags">
-    <button onClick="clickHandler(url.value, tags.value, event);">scrape</button>
+    <input type="text" placeholder="href class id" name="targets">
+    <button onClick="clickHandler(url.value, tags.value, targets.value, event);">scrape</button>
   </form>
 
   <div id="display"></div>

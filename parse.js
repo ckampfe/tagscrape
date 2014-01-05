@@ -1,14 +1,14 @@
 /* init */
-function parseResults(tags, queryResults) {
+function parseResults(tags, targets, queryResults) {
 
-  var targetAttrs   = ['content', 'href', 'class', 'id'],
-      searchResults = {};
+  var searchResults = {};
+  targets.unshift('content');
 
   tags.forEach(function(el) {
     searchResults[el] = [];
   });
 
-  return search( queryResults.body, 'body', tags, targetAttrs, searchResults);
+  return search(queryResults.body, 'body', tags, targets, searchResults);
 }
 
 function search(
@@ -63,4 +63,18 @@ Array.prototype.include = function(challengeEl) {
   });
 
   return ( lengthTarget.length ? true : false );
+}
+
+// like Ruby's Array#uniq
+Array.prototype.uniq = function() {
+  if (this.length <= 1) {
+    return this;
+  } else {
+    var dict = {};
+    for (var i = 0; i < this.length; i++) {
+      dict[this[i]] = 0;
+    }
+
+    return Object.keys(dict);
+  }
 }
